@@ -320,6 +320,7 @@
   .lesson-form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
   .lesson-form button { display: block; width: 100%; margin-top: 1.3rem; background: var(--gold); color: var(--navy); font: inherit; font-weight: 700; font-size: 1.1rem; padding: 0.85rem 1rem; border: 0; border-radius: 999px; cursor: pointer; }
   .lesson-form button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.3); }
+  .lesson-form .note a { color: var(--gold); }
   .lesson-form .note { font-size: 0.85rem; opacity: 0.85; text-align: center; margin-top: 0.8rem; }
   @media (max-width: 800px) { .lesson-form .row { grid-template-columns: 1fr; } }
 </style>
@@ -404,8 +405,12 @@
       <input id="lf-days" name="days" type="text" placeholder="e.g. weekday afternoons, Saturday mornings" required>
       <label for="lf-notes">Anything else? (optional)</label>
       <textarea id="lf-notes" name="notes"></textarea>
-      <button type="submit">Send Request</button>
-      <p class="note">This opens a pre-filled email to the academy. Just press send.</p>
+      <button type="submit">Open Email Draft</button>
+      <p class="note">Nothing is sent yet. This opens a pre-filled email in your email app. Press send there to submit your request.</p>
+      <div id="lf-fallback" class="note" style="display:none; text-align:left; opacity:1">
+        <p><strong>Email draft opened?</strong> Press send in your email app to finish. If nothing opened, copy the details below and email them to <a href="mailto:AllAboutTennisAcademy@Gmail.com" style="text-decoration:underline">AllAboutTennisAcademy@Gmail.com</a>. Your request has not been sent.</p>
+        <textarea id="lf-copy" readonly style="margin-top:0.5rem; min-height:140px"></textarea>
+      </div>
     </form>
     <script>
       document.getElementById('lesson-form').addEventListener('submit', function (e) {
@@ -414,6 +419,8 @@
         var body = 'Lesson request\n\nName: ' + f.name.value + '\nPhone: ' + f.phone.value + '\nPlayer age: ' + f.age.value +
           '\nPlayer level: ' + f.level.value + '\nPreferred days/times: ' + f.days.value +
           (f.notes.value ? '\nNotes: ' + f.notes.value : '');
+        document.getElementById('lf-copy').value = body;
+        document.getElementById('lf-fallback').style.display = 'block';
         window.location.href = 'mailto:AllAboutTennisAcademy@Gmail.com?subject=' + encodeURIComponent('Lesson request from ' + f.name.value) + '&body=' + encodeURIComponent(body);
       });
     </script>
